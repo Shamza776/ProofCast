@@ -1,14 +1,38 @@
 // src/utils/ipfsClient.ts
-import { Web3Storage } from "web3.storage";
+// const PINATA_API_KEY = import.meta.env.VITE_PINATA_API_KEY!;
+// const PINATA_SECRET_API_KEY = import.meta.env.VITE_PINATA_SECRET_API_KEY!;
 
-const WEB3_STORAGE_TOKEN = import.meta.env.VITE_WEB3_STORAGE_TOKEN;
+// src/utils/ipfsClient.ts
+export async function uploadToIPFS(content: string) {
+  try {
+    const token = import.meta.env.VITE_PINATA_JWT;
+    if (!token) throw new Error("Missing Pinata JWT in .env file");
 
-export const uploadToIPFS = async (content: string) => {
-  const client = new Web3Storage({ token: WEB3_STORAGE_TOKEN });
+    const blob = new Blob([content], { type: "text/plain" });
+    const file = new File([blob], "announcement.txt", { type: "text/plain" });
 
-  const file = new File([content], "announcement.txt", { type: "text/plain" });
-  const cid = await client.put([file]);
-  
-  console.log("✅ Uploaded to IPFS with CID:", cid);
-  return cid; // This is your decentralized file ID
-};
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(`Pinata upload failed: ${res.status} - ${errText}`);
+    }
+
+    const data = await res.json();
+    console.log("📦 Pinata upload success:", data);
+    return data.IpfsHash;
+  } catch (err) {
+    console.error("❌ Error uploading to IPFS:", err);
+    throw err;
+  }
+}
+
