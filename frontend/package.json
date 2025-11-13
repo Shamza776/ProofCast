@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@pinata/sdk": "^2.1.0",
     "aqua-js-sdk": "^3.2.1-45",
     "ethers": "^6.15.0",
     "react": "^19.1.1",
