@@ -95,7 +95,7 @@ export default function CreateAnnouncement() {
       };
       setSignature(signatureData);
 
-      // Show clean success messages
+      // Show success messages
       setLogs(prev => [
         ...prev,
         "✅ Notarization completed!",

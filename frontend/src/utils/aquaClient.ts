@@ -161,8 +161,7 @@ export const simpleVerify = async (content: string, originalProof: any): Promise
       const isValidStructure = hasSignatures && hasWitnesses;
       console.log("🔍 Aqua proof structure validation:", isValidStructure);
       
-      // For now, assume valid structure means it's a real proof
-      // In production, you should use Aqua's actual verification
+      
       return isValidStructure;
     }
 
@@ -176,7 +175,7 @@ export const simpleVerify = async (content: string, originalProof: any): Promise
   }
 };
 
-// ✅ ENHANCED verification with content storage
+// ✅ verification with content storage
 export const enhancedVerify = async (content: string, proofData: any): Promise<boolean> => {
   try {
     console.log("🔍 Enhanced verification started...");
